@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.carRoutes = void 0;
+var express = require("express");
+var carService_1 = require("../../../core/services/carService");
+var typeOrmUserRepo_1 = require("../../secondaryAdapter/typeOrmUserRepo");
+var typeOrmCarsRepo_1 = require("../../secondaryAdapter/typeOrmCarsRepo");
+var Cars_controllers_1 = require("../controllers/Cars.controllers");
+var Middleware_1 = require("../middleware/Middleware");
+var carRepository = new typeOrmCarsRepo_1.typeOrmCarsRepo();
+var userRepository = new typeOrmUserRepo_1.TypeOrmUserRepositoryPort();
+var carService = new carService_1.CarService(carRepository, userRepository);
+var CarsControllers = new Cars_controllers_1.CarsController(carService);
+var router = express.Router();
+exports.carRoutes = router;
+router.get("/cars", Middleware_1.Middleware.verifyToken, CarsControllers.getCars.bind(CarsControllers));
+router.get("/car/:id", Middleware_1.Middleware.verifyToken, CarsControllers.getCar.bind(CarsControllers));
+router.post("/car/create", Middleware_1.Middleware.verifyToken, CarsControllers.createCar.bind(CarsControllers));
+router.put("/car/:id", Middleware_1.Middleware.verifyToken, CarsControllers.updateCar.bind(CarsControllers));
+router.delete("/car/:id", Middleware_1.Middleware.verifyToken, CarsControllers.deleteCar.bind(CarsControllers));
+//# sourceMappingURL=car.routes.js.map
